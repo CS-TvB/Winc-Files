@@ -3,17 +3,17 @@ __human_name__ = "files"
 
 ###########################################MAIN!!###########################################
 import os
-from posixpath import abspath
 from zipfile import ZipFile
 
 def clean_cache():
-    dir = os.path.join(r"C:\Users\TvanBoom\OneDrive - Rotero Groep\Documenten\Winc\files", "cache")
+    dir = os.path.join(os.getcwd(), "files", "cache")
     if not os.path.exists(dir):
         os.mkdir(dir)
     if os.path.exists(dir):
-        files = os.listdir("files\\cache")
+        file = os.path.join("files", "cache")
+        files = os.listdir(file)
         for i in files:
-            os.remove('files\\cache\\' +i)
+            os.remove( os.path.join("files", "cache", i))
 
 def cache_zip(zippie_path, chache_path):
     with ZipFile(zippie_path, 'r') as zipObj:
@@ -28,10 +28,10 @@ def cached_files():
             if os.path.isfile(file_path):
                 if not file_path in all_file_paths:
                     all_file_paths.append(file_path)
-    print (all_file_paths)
     return (all_file_paths)
 
-def find_password(all_file_paths):
+def find_password(cached_files):
+    all_file_paths = cached_files
     for i in all_file_paths:
         with open(i) as openfile:
             for line in openfile:
@@ -41,13 +41,12 @@ def find_password(all_file_paths):
                     password = password.strip()
                     return (password)
 
-all_file_paths = []
-zippie_path = "files\\data.zip"
-chache_path = "files\\cache"
+zippie_path = os.path.join(os.getcwd(), "files", "data.zip")
+chache_path = os.path.join(os.getcwd(), "files", "cache")
 clean_cache()
 cache_zip(zippie_path, chache_path)
 cached_files()
-find_password(all_file_paths)
+find_password(cached_files())
 
 ###########################################Questions!!###########################################
 """ 1) clean_cache: takes no arguments and creates an empty folder named cache in the current directory. If it already exists, it deletes everything in the cache folder."""
